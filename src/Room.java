@@ -21,4 +21,12 @@ public class Room {
     public ArrayList<Direction> getDirections() {
         return directions;
     }
+
+    public void printDirections() {
+        System.out.print("From here, you can go: ");
+        for (Direction direction : directions) {
+            System.out.print(direction.getName() + ", ");
+        }
+        System.out.println();
+    }
 }

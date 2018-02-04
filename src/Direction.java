@@ -11,4 +11,5 @@ public class Direction {
     public String getRoom() {
         return room;
     }
+
 }
