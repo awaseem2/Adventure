@@ -1,10 +1,11 @@
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Room {
     private String name;
     private String description;
-    private ArrayList<String> items;
-    private ArrayList<Direction> directions;
+    private ArrayList<String> items = new ArrayList<>();
+    private ArrayList<Direction> directions = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -31,5 +32,22 @@ public class Room {
             }
         }
         System.out.println();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room room = (Room) o;
+        return Objects.equals(name, room.name) &&
+                Objects.equals(description, room.description) &&
+                Objects.equals(items, room.items) &&
+                Objects.equals(directions, room.directions);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(name, description, items, directions);
     }
 }

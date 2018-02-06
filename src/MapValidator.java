@@ -1,4 +1,10 @@
+import java.util.ArrayList;
+
 public class MapValidator {
+
+
+
+
     /*int endingRoomIndex = Map.getRooms().indexOf(Map.getEndingRoom());
     int startingRoomIndex = Map.getRooms().indexOf(Map.getStartingRoom());
     Room endingRoom = Map.getRooms().get(endingRoomIndex);

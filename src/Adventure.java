@@ -16,6 +16,7 @@ public class Adventure {
             System.out.println("Invalid URL.");
         }
 
+        //MapValidator.testMapIsValid();
         player.setCurrentRoom(UtilityFunctions.convertToRoom(Environment.getMap().getStartingRoom()));
 
         System.out.println(Player.getCurrentRoom().getDescription());
