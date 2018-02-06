@@ -5,13 +5,14 @@ import java.util.Scanner;
 
 public class Adventure {
 
+    private static Scanner scanner = new Scanner(System.in);
     private static Map map = new Map();
     private static Player player = new Player();
+    private static Room currentRoom;
     private static String currentRoomString;
     private static int indexOfCurrentRoom;
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
         try {
             map = DataLoader.mapFromUrl(args[0]);
@@ -20,32 +21,86 @@ public class Adventure {
             System.out.println("Invalid URL.");
         }
 
-        Room firstRoom = map.getRooms().get(0);
+        currentRoom = map.getRooms().get(0);
         indexOfCurrentRoom = 0;
-        player.setCurrentRoom(firstRoom);
-        System.out.println(firstRoom.getDescription());
+        currentRoomString = map.getRooms().get(0).toString();
+        player.setCurrentRoom(currentRoom);
+        System.out.println(currentRoom.getDescription());
         System.out.println("Your journey begins here.");
-        System.out.println("This room contains " + itemsAsString(firstRoom.getItems()));
+        System.out.println("This room contains " + itemsAsString(currentRoom.getItems()));
         System.out.println("From here, you can go: " +
-                firstRoom.getDirections().get(0).getName());
+                currentRoom.getDirections().get(0).getName());
         String[] input = scanner.nextLine().split(" ");
         interpretInput(input);
 
         while(!currentRoomString.equals(map.getEndingRoom())) {
-            Room currentRoomObject = map.getRooms().get(indexOfCurrentRoom);
-            System.out.println(currentRoomObject.getDescription());
-            System.out.println("This room contains " + itemsAsString(currentRoomObject.getItems()));
-            currentRoomObject.printDirections();
+            currentRoom = map.getRooms().get(indexOfCurrentRoom);
+            System.out.println(currentRoom.getDescription());
+            System.out.println("This room contains " + itemsAsString(currentRoom.getItems()));
+            currentRoom.printDirections();
             input = scanner.nextLine().split(" ");
             interpretInput(input);
         }
 
     }
 
+    private static void interpretInput(String[] userInput) {
+        String action = userInput[0];
+        String parameter = inputAfterAction(userInput);
+        switch(action.toLowerCase()) {
+            case "go":
+                boolean found = false;
+                String desiredDirection = parameter;
+                ArrayList<Direction> availableDirections =
+                        map.getRooms().get(indexOfCurrentRoom).getDirections();
+                for(Direction currentDirection : availableDirections) {
+                    if(currentDirection.getName().equalsIgnoreCase(desiredDirection)) {
+                        found = true;
+                        currentRoomString = currentDirection.getRoom();
+                        findRoom(currentRoomString);
+                    }
+                }
+                if(!found){
+                    System.out.println("I can’t go " + parameter);
+                }
+                break;
+            case "take":
+                if(currentRoom.getItems().contains(parameter)) {
+                    player.getCurrentItems().add(parameter);
+                    map.getRooms().get(indexOfCurrentRoom).getItems().remove(parameter);
+                } else {
+                    System.out.println("I can't take " + parameter);
+                }
+                break;
+            case "drop":
+                if(player.getCurrentItems().contains(parameter)) {
+                    player.getCurrentItems().remove(parameter);
+                    map.getRooms().get(indexOfCurrentRoom).getItems().add(parameter);
+                } else {
+                    System.out.println("I can't drop " + parameter);
+                }
+                break;
+            case "list":
+                System.out.println("You are carrying " + itemsAsString(player.getCurrentItems()));
+                break;
+            case "exit":
+                System.exit(0);
+                break;
+            default:
+                System.out.println("I don't understand '" + action  + " " + parameter + "'");
+                break;
+
+        }
+    }
+
     private static String itemsAsString(ArrayList<String> items){
         String allItems = "";
 
-        if(items == null){
+        if(items == null) {
+            return "";
+        }
+
+        if(items.isEmpty()) {
             return "nothing";
         }
 
@@ -56,29 +111,6 @@ public class Adventure {
         return allItems;
     }
 
-    private static void interpretInput(String[] userInput) {
-        String action = userInput[0];
-        boolean found = false;
-        if(action.equalsIgnoreCase("go")) {
-            String desiredDirection = userInput[1];
-            ArrayList<Direction> availableDirections =
-                    map.getRooms().get(indexOfCurrentRoom).getDirections();
-            for(Direction currentDirection : availableDirections) {
-                if(currentDirection.getName().equalsIgnoreCase(desiredDirection)) {
-                    found = true;
-                    currentRoomString = currentDirection.getRoom();
-                    findRoom(currentRoomString);
-                }
-            }
-        }
-        if(!found){
-            System.out.println("I can’t go ");
-            for (String currentWord : userInput) {
-                System.out.print(currentWord + " ");
-            }
-        }
-    }
-
     private static void findRoom(String roomName) {
         ArrayList<Room> rooms = map.getRooms();
         for(Room currentRoom : rooms) {
@@ -86,5 +118,16 @@ public class Adventure {
                 indexOfCurrentRoom = rooms.indexOf(currentRoom);
             }
         }
+    }
+
+    private static String inputAfterAction(String[] inputArray){
+        StringBuilder builder = new StringBuilder();
+        for(int i = 1; i < inputArray.length; i++){
+            builder.append(inputArray[i]);
+            if(i != inputArray.length - 1) {
+                builder.append(" ");
+            }
+        }
+        return builder.toString();
     }
 }
