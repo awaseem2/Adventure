@@ -12,12 +12,12 @@ public class DataLoader {
      * @return a Map object initialized from the json file.
      * @throws UnirestException
      */
-    public static Map mapFromUrl(String url) throws UnirestException{
+    public static void initializeMapFromUrl(String url) throws UnirestException{
         HttpRequest request = Unirest.get(url);
         String jsonFromUrl = request.asJson().getBody().toString();
         Gson gson = new Gson();
-        Map map = gson.fromJson(jsonFromUrl, Map.class);
-        return map;
+
+        Environment.setMap(gson.fromJson(jsonFromUrl, Map.class));
     }
 
 }

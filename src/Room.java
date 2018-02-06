@@ -24,8 +24,11 @@ public class Room {
 
     public void printDirections() {
         System.out.print("From here, you can go: ");
-        for (Direction direction : directions) {
-            System.out.print(direction.getName() + ", ");
+        for(int i = 0; i < directions.size(); i++) {
+            System.out.print(directions.get(i).getName());
+            if(i != directions.size() - 1) {
+                System.out.print(", ");
+            }
         }
         System.out.println();
     }

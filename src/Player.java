@@ -1,22 +1,22 @@
 import java.util.ArrayList;
 
 public class Player {
-    private ArrayList<String> currentItems = new ArrayList<>();
-    private Room currentRoom;
+    private static ArrayList<String> currentItems = new ArrayList<>();
+    private static Room currentRoom;
 
-    public ArrayList<String> getCurrentItems() {
+    public static ArrayList<String> getCurrentItems() {
         return currentItems;
     }
 
-    public Room getCurrentRoom() {
+    public static Room getCurrentRoom() {
         return currentRoom;
     }
 
-    public void setCurrentItems(ArrayList<String> currentItems) {
-        this.currentItems = currentItems;
+    public static void setCurrentItems(ArrayList<String> currentItems) {
+        Player.currentItems = currentItems;
     }
 
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
+    public static void setCurrentRoom(Room currentRoom) {
+        Player.currentRoom = currentRoom;
     }
 }
