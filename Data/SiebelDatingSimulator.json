@@ -1,0 +1,144 @@
+{
+  "startingRoom": "MatthewsStreet",
+  "endingRoom": "ACM",
+  "rooms": [
+    {
+      "name": "MatthewsStreet",
+      "description": "You are on Matthews, outside the Siebel Center. Angrave is drenched in sweat as he locks up the bike he rode to Siebel.",
+      "items": [
+        {
+          "name": "microphone",
+          "use": "[You have been lured into a rap battle with Angrave.] \n Angrave: Hey kid, if you think you get recursion, that's cute.  'Let it go' all the way to subversion. [You instantly lose and walk away with your head down, fighting back tears.]"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "SiebelEntry"
+        }
+      ],
+      "npc": [
+        {
+          "name": "Angrave",
+          "message" : "You: hello- \n Angrave: sigh... very well then. But it doesn't seem to me that you've gotten how to college yet."
+        }
+      ]
+    },
+    {
+      "name": "SiebelEntry",
+      "description": "You are in the entrance to Siebel. There is a PrettyGirl ™ you have never met before sitting on her phone.",
+      "items" : [
+        {
+          "name": "resume",
+          "use": "[You hand the Pretty Girl your resume. You are sure she won't be able to resist you after seeing your three pages of pure genius. \n Weirdly, when you go to hand her the paper, she rejects you command promptly.]"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "Room1404"
+        },
+        {
+          "directionName": "North",
+          "room": "Einsteins"
+        }
+      ],
+      "npc": [
+        {
+          "name": "PrettyGirl",
+          "message": "You: Hey girl, are you assembly? Cause the only thing that should be low level here is your standards for me."
+        }
+      ]
+    },
+    {
+      "name": "Room1404",
+      "description": "You are in Room 1404. There is a class full of freshman in CS 125. Challen is teaching at the front.",
+      "items" : [
+        {
+          "name": "worksheet",
+          "use": "[You grab the lecture notes for the class. \n As you look over the sheet of stupidly easy concepts, your 150 IQ helps you find a secret message in the code. \n 'TAKE OVER CS @ UIUC' it reads in binary. You consider whether this should alarm you, \n but you ultimately decide your hunt for a girlfriend is more important.]"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "East",
+          "room": "SiebelEntry"
+        }
+      ],
+      "npc": [
+        {
+          "name": "Challen",
+          "message": "You: Hey Challen! \n Challen: First of all, I go by Geoffrey."
+        }
+      ]
+    },
+    {
+      "name": "Einsteins",
+      "description": "You stand in front of the origin of your breakfast, lunch, and dinner, Einstein Bros Bagels. You spot PrettyGirl2 sitting drinking coffee.",
+      "items" : [
+        {
+          "name": "cash",
+          "use": "[You attempt to buy the most expensive bagel on the menu, but halfway through your order, \n the cashier shoos you away and chucks the first bagel they see towards you. \n You don't think anything of it since you assume she must have been intimidated by your devilishly handsome reflections projects shirt.]"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "South",
+          "room": "SiebelEntry"
+        },
+        {
+          "directionName": "East",
+          "room": "Room1302"
+        },
+        {
+          "directionName": "North",
+          "room": "ACM"
+        }
+      ],
+      "npc": [
+        {
+          "name": "PrettyGirl2",
+          "message": "You: Hey girl, are you 374? Because I'd like to take you back to my dorm and spend 20 minutes with you before I'm finished with an easy A."
+        }
+      ]
+    },
+    {
+      "name": "Room1302",
+      "description": "You enter Room 1302. A CS 125 lab is in session. You spot a FreshmanGirl sitting near the door listening to the doyens.",
+      "items" : [
+        {
+          "name": "expo",
+          "use": "[You commandeer an expo marker from the doyens and proceed to teach the class \n about the importance of the Cloud. It has nothing to do with their lecture, \n but you hope to impress the clueless girl in the back. \n Weirdly, all the Freshman cover their nose and mouth, presumably in shock from your intellect.]"
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "West",
+          "room": "Einsteins"
+        }
+      ],
+      "npc": [
+        {
+          "name": "FreshmanGirl",
+          "message": "You: Hey beautiful, are you a binary tree? Cause I wanna take your node and create at most two children from it."
+        }
+      ]
+    },
+    {
+      "name": "ACM",
+      "description": "You arrive in the ACM office. A tumbleweed blows past in the corner of your eye.",
+      "items" : [
+        {
+          "name": "deodorant",
+          "use": "In a feat of desperation, you half heartedly use the deodorant, not sure what else you have left in life without finding a girlfriend. \n Suddenly, all the girls you've ever flirted with coagulate in front of you. You look around to see there's a faint light glow around you. \n You begin to float. You've done it. You've reached a level of attractive never before seen by any CS major. \n You are the reason God fears what he's created."
+        }
+      ],
+      "directions": [
+        {
+          "directionName": "South",
+          "room": "Einsteins"
+        }
+      ]
+    }
+  ]
+}

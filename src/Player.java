@@ -1,10 +1,10 @@
 import java.util.ArrayList;
 
 public class Player {
-    private static ArrayList<String> currentItems = new ArrayList<>();
+    private static ArrayList<Item> currentItems = new ArrayList<>();
     private static Room currentRoom;
 
-    public static ArrayList<String> getCurrentItems() {
+    public static ArrayList<Item> getCurrentItems() {
         return currentItems;
     }
 
@@ -12,7 +12,7 @@ public class Player {
         return currentRoom;
     }
 
-    public static void setCurrentItems(ArrayList<String> currentItems) {
+    public static void setCurrentItems(ArrayList<Item> currentItems) {
         Player.currentItems = currentItems;
     }
 

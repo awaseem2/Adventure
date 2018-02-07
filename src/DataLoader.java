@@ -16,8 +16,7 @@ public class DataLoader {
         HttpRequest request = Unirest.get(url);
         String jsonFromUrl = request.asJson().getBody().toString();
         Gson gson = new Gson();
-
-        Environment.setMap(gson.fromJson(jsonFromUrl, Map.class));
+        Environment.setMap(gson.fromJson(UtilityFunctions.getFileContentsAsString("SiebelDatingSimulator.json"), Map.class));
     }
 
 }

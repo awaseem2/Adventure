@@ -24,23 +24,50 @@ public class UserInput {
                 }
                 break;
             case "take":
-                if(currentRoom.getItems().contains(parameter)) {
-                    Player.getCurrentItems().add(parameter);
-                    currentRoom.getItems().remove(parameter);
-                } else {
+                found = false;
+                for(Item item : Player.getCurrentRoom().getItems()) {
+                    if (item.getName().equalsIgnoreCase(parameter)) {
+                        Player.getCurrentItems().add(item);
+                        Player.getCurrentRoom().getItems().remove(item);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if(!found) {
                     System.out.println("I can't take " + parameter);
                 }
                 break;
             case "drop":
-                if(Player.getCurrentItems().contains(parameter)) {
-                    Player.getCurrentItems().remove(parameter);
-                    currentRoom.getItems().add(parameter);
-                } else {
+                found = false;
+                for(Item item: Player.getCurrentItems()) {
+                    if (item.getName().equalsIgnoreCase(parameter)) {
+                        Player.getCurrentItems().remove(item);
+                        currentRoom.getItems().add(item);
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) {
                     System.out.println("I can't drop " + parameter);
                 }
                 break;
             case "list":
                 System.out.println("You are carrying " + UtilityFunctions.itemsAsString(Player.getCurrentItems()));
+                break;
+            case "use":
+                found = false;
+                for(Item item: Player.getCurrentItems()) {
+                    if (item.getName().equalsIgnoreCase(parameter)){
+                        System.out.println(item.getUse());
+                        Player.getCurrentItems().remove(item);
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) {
+                    System.out.println("I can't use " + parameter);
+                }
                 break;
             case "exit":
                 System.exit(0);

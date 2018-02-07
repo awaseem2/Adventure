@@ -4,7 +4,7 @@ import java.util.Objects;
 public class Room {
     private String name;
     private String description;
-    private ArrayList<String> items = new ArrayList<>();
+    private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Direction> directions = new ArrayList<>();
 
     public String getName() {
@@ -15,7 +15,7 @@ public class Room {
         return description;
     }
 
-    public ArrayList<String> getItems() {
+    public ArrayList<Item> getItems() {
         return items;
     }
 
