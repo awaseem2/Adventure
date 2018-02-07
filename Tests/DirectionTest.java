@@ -8,12 +8,12 @@ public class DirectionTest {
     @Before
     public void setUp() throws Exception {
         DataLoader.initializeMapFromUrl
-                ("https://courses.engr.illinois.edu/cs126/adventure/siebel.json");
+                ("https://api.myjson.com/bins/10cmpl");
     }
 
     @Test
     public void getName() {
-        assertEquals("East",
+        assertEquals("West",
                 Environment.getMap().getRooms().get(0).getDirections().get(0).getName());
     }
 
