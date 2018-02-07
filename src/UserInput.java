@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 
 public class UserInput {
+
+    /** Takes what the user writes in the console and handles the input accordingly
+     *
+     * @param userInput The player's command split by spaces into an Array of String.
+     */
     public static void interpretInput(String[] userInput) {
         String action = userInput[0];
         String parameter = inputAfterAction(userInput);
@@ -69,6 +74,19 @@ public class UserInput {
                     System.out.println("I can't use " + parameter);
                 }
                 break;
+            case "talk":
+                found = false;
+                for(Npc npc: Player.getCurrentRoom().getNpc()) {
+                    if (npc.getName().equalsIgnoreCase(parameter)){
+                        System.out.println(npc.getMessage());
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) {
+                    System.out.println("I can't talk to " + parameter);
+                }
+                break;
             case "exit":
                 System.exit(0);
                 break;
@@ -85,6 +103,12 @@ public class UserInput {
 
         }
     }
+
+    /** Helper method for userInput to handle the rest of the command.
+     *
+     * @param inputArray The player's command split by spaces into an Array of String.
+     * @return A String of the player's command after the very first word.
+     */
     private static String inputAfterAction(String[] inputArray){
         StringBuilder builder = new StringBuilder();
         for(int i = 1; i < inputArray.length; i++){
