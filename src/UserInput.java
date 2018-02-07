@@ -10,12 +10,14 @@ public class UserInput {
         String action = userInput[0];
         String parameter = inputAfterAction(userInput);
         Room currentRoom = Player.getCurrentRoom();
+
         switch(action.toLowerCase()) {
             case "go":
                 boolean found = false;
                 String desiredDirection = parameter;
                 ArrayList<Direction> availableDirections =
                         currentRoom.getDirections();
+
                 for(Direction currentDirection : availableDirections) {
                     if(currentDirection.getName().equalsIgnoreCase(desiredDirection)) {
                         found = true;
@@ -24,12 +26,16 @@ public class UserInput {
                         break;
                     }
                 }
+
                 if(!found){
                     System.out.println("I can’t go " + parameter);
                 }
+
                 break;
+
             case "take":
                 found = false;
+
                 for(Item item : Player.getCurrentRoom().getItems()) {
                     if (item.getName().equalsIgnoreCase(parameter)) {
                         Player.getCurrentItems().add(item);
@@ -42,9 +48,12 @@ public class UserInput {
                 if(!found) {
                     System.out.println("I can't take " + parameter);
                 }
+
                 break;
+
             case "drop":
                 found = false;
+
                 for(Item item: Player.getCurrentItems()) {
                     if (item.getName().equalsIgnoreCase(parameter)) {
                         Player.getCurrentItems().remove(item);
@@ -53,15 +62,21 @@ public class UserInput {
                         break;
                     }
                 }
+
                 if(!found) {
                     System.out.println("I can't drop " + parameter);
                 }
+
                 break;
+
             case "list":
-                System.out.println("You are carrying " + UtilityFunctions.itemsAsString(Player.getCurrentItems()));
+                System.out.println("You are carrying " + 
+                        UtilityFunctions.itemsAsString(Player.getCurrentItems()));
                 break;
+
             case "use":
                 found = false;
+
                 for(Item item: Player.getCurrentItems()) {
                     if (item.getName().equalsIgnoreCase(parameter)){
                         System.out.println(item.getUse());
@@ -70,12 +85,16 @@ public class UserInput {
                         break;
                     }
                 }
+
                 if(!found) {
                     System.out.println("I can't use " + parameter);
                 }
+
                 break;
+
             case "talk":
                 found = false;
+
                 for(Npc npc: Player.getCurrentRoom().getNpc()) {
                     if (npc.getName().equalsIgnoreCase(parameter)){
                         System.out.println(npc.getMessage());
@@ -83,22 +102,28 @@ public class UserInput {
                         break;
                     }
                 }
+
                 if(!found) {
                     System.out.println("I can't talk to " + parameter);
                 }
+
                 break;
+
             case "exit":
                 System.exit(0);
                 break;
+
             case "quit":
                 System.exit(0);
                 break;
+
             default:
                 if(userInput.length == 1) {
                     System.out.println("I don't understand '" + action + "'");
                 } else {
                     System.out.println("I don't understand '" + action  + " " + parameter + "'");
                 }
+
                 break;
 
         }
