@@ -39,6 +39,10 @@
           "room": "Room1404"
         },
         {
+          "directionName": "East",
+          "room": "MatthewsStreet"
+        },
+        {
           "directionName": "North",
           "room": "Einsteins"
         }
@@ -126,13 +130,7 @@
     },
     {
       "name": "ACM",
-      "description": "You arrive in the ACM office. A tumbleweed blows past in the corner of your eye.",
-      "items" : [
-        {
-          "name": "deodorant",
-          "use": "In a feat of desperation, you half heartedly use the deodorant, not sure what else you have left in life without finding a girlfriend. \n Suddenly, all the girls you've ever flirted with coagulate in front of you. You look around to see there's a faint light glow around you. \n You begin to float. You've done it. You've reached a level of attractive never before seen by any CS major. \n You are the reason God fears what he's created."
-        }
-      ],
+      "description": "You arrive in the ACM office. A tumbleweed blows past in the corner of your eye. \n You spot deodorant on the table. In a feat of desperation, you half heartedly use the deodorant, not sure what else you have left in life without finding a girlfriend. \n Suddenly, all the girls you've ever flirted with coagulate in front of you. You look around to see there's a faint light glow around you. \n You begin to float. You've done it. You've reached a level of attractive never before seen by any CS major. \n You are the reason God fears what he's created.",
       "directions": [
         {
           "directionName": "South",
