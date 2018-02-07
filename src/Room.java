@@ -5,6 +5,7 @@ public class Room {
     private String name;
     private String description;
     private ArrayList<Item> items = new ArrayList<>();
+    private ArrayList<Npc> npc = new ArrayList<>();
     private ArrayList<Direction> directions = new ArrayList<>();
 
     public String getName() {
@@ -19,10 +20,15 @@ public class Room {
         return items;
     }
 
+    public ArrayList<Npc> getNpc() {
+        return npc;
+    }
+
     public ArrayList<Direction> getDirections() {
         return directions;
     }
 
+    /** Prints a list separated by commas of the valid directions the player can move in. */
     public void printDirections() {
         System.out.print("From here, you can go: ");
         for(int i = 0; i < directions.size(); i++) {
