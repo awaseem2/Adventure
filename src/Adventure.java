@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Adventure {
-
     private static Scanner scanner = new Scanner(System.in);
     private static Player player = new Player();
 
@@ -16,12 +15,14 @@ public class Adventure {
             System.out.println("Invalid URL.");
         }
 
-        //MapValidator.testMapIsValid();
-        player.setCurrentRoom(UtilityFunctions.convertToRoom(Environment.getMap().getStartingRoom()));
+        player.setCurrentRoom(UtilityFunctions.convertToRoom(
+                Environment.getMap().getStartingRoom()));
 
+        //Initial console output
         System.out.println(Player.getCurrentRoom().getDescription());
         System.out.println("Your journey begins here.");
-        System.out.println("This room contains " + UtilityFunctions.itemsAsString(Player.getCurrentRoom().getItems()));
+        System.out.println("This room contains " + UtilityFunctions.itemsAsString(
+                Player.getCurrentRoom().getItems()));
         System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
         System.out.println("From here, you can go: " +
                 Player.getCurrentRoom().getDirections().get(0).getName());
@@ -36,7 +37,7 @@ public class Adventure {
         }
 
         System.out.println(Player.getCurrentRoom().getDescription());
-        System.out.println("Congratulations, you reached the ending room!");
+        System.out.println("You have reached your final destination.");
 
     }
 
