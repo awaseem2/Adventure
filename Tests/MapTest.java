@@ -8,9 +8,9 @@ import static org.junit.Assert.*;
 public class MapTest {
 
     @Before
-    public void setUp() throws UnirestException{
+    public void setUp() throws Exception {
         DataLoader.initializeMapFromUrl
-                ("https://courses.engr.illinois.edu/cs126/adventure/siebel.json");
+                ("https://api.myjson.com/bins/10cmpl");
     }
 
     @Test
@@ -20,11 +20,11 @@ public class MapTest {
 
     @Test
     public void getEndingRoom() {
-        assertEquals("Siebel1314", Environment.getMap().getEndingRoom());
+        assertEquals("ACM", Environment.getMap().getEndingRoom());
     }
 
     @Test
     public void getRooms() {
-        assertEquals(8, Environment.getMap().getRooms().size());
+        assertEquals(6, Environment.getMap().getRooms().size());
     }
 }
