@@ -6,7 +6,7 @@ public class Npc {
         return name;
     }
 
-    public String getUse() {
+    public String getMessage() {
         return message;
     }
 }
