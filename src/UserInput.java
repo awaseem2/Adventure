@@ -70,7 +70,7 @@ public class UserInput {
                 break;
 
             case "list":
-                System.out.println("You are carrying " + 
+                System.out.println("You are carrying " +
                         UtilityFunctions.itemsAsString(Player.getCurrentItems()));
                 break;
 
@@ -136,12 +136,14 @@ public class UserInput {
      */
     private static String inputAfterAction(String[] inputArray){
         StringBuilder builder = new StringBuilder();
+        
         for(int i = 1; i < inputArray.length; i++){
             builder.append(inputArray[i]);
             if(i != inputArray.length - 1) {
                 builder.append(" ");
             }
         }
+        
         return builder.toString();
     }
 }
