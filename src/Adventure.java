@@ -22,6 +22,7 @@ public class Adventure {
         System.out.println(Player.getCurrentRoom().getDescription());
         System.out.println("Your journey begins here.");
         System.out.println("This room contains " + UtilityFunctions.itemsAsString(Player.getCurrentRoom().getItems()));
+        System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
         System.out.println("From here, you can go: " +
                 Player.getCurrentRoom().getDirections().get(0).getName());
         String[] input = scanner.nextLine().split(" ");
@@ -39,10 +40,12 @@ public class Adventure {
 
     }
 
+    /** Prints the room the player is in, what it contains, and the available directions.  */
     private static void printDescription() {
         System.out.println(Player.getCurrentRoom().getDescription());
         System.out.println("This room contains " +
                 UtilityFunctions.itemsAsString(Player.getCurrentRoom().getItems()));
+        System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
         Player.getCurrentRoom().printDirections();
     }
 
