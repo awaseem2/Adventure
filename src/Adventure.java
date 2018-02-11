@@ -40,18 +40,20 @@ public class Adventure {
         System.out.println("This room contains " + UtilityFunctions.itemsAsString(
                 Player.getCurrentRoom().getItems()));
         System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
+
         if(Player.getCurrentRoom().getMonstersInRoom().isEmpty()) {
             System.out.println("From here, you can go: " +
                     Player.getCurrentRoom().getDirections().get(0).getName());
         }
+
         String[] input = scanner.nextLine().split(" ");
-        UserInput.interpretInput(input);
+        handleInput(input);
 
         while (!Player.getCurrentRoom().equals(
                 UtilityFunctions.convertToRoom(Environment.getMap().getEndingRoom()))) {
             printDescription();
             input = scanner.nextLine().split(" ");
-            UserInput.interpretInput(input);
+            handleInput(input);
         }
 
         System.out.println(Player.getCurrentRoom().getDescription());
@@ -68,6 +70,14 @@ public class Adventure {
         System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
         if(Player.getCurrentRoom().getMonstersInRoom().isEmpty()) {
             Player.getCurrentRoom().printDirections();
+        }
+    }
+
+    private static void handleInput(String[] input) {
+        if(!Player.isInDuel()) {
+            UserInput.interpretInput(input);
+        } else {
+            DuelInput.interpretInput(input);
         }
     }
 
