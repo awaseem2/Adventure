@@ -7,6 +7,7 @@ public class Room {
     private ArrayList<Item> items = new ArrayList<>();
     private ArrayList<Npc> npc = new ArrayList<>();
     private ArrayList<Direction> directions = new ArrayList<>();
+    private ArrayList<String> monstersInRoom = new ArrayList<>();
 
     public String getName() {
         return name;
@@ -26,6 +27,10 @@ public class Room {
 
     public ArrayList<Direction> getDirections() {
         return directions;
+    }
+
+    public ArrayList<String> getMonstersInRoom() {
+        return monstersInRoom;
     }
 
     /** Prints a list separated by commas of the valid directions the player can move in. */
