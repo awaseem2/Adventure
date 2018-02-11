@@ -8,9 +8,10 @@ public class Player {
     private static Room currentRoom;
     private static double attack;
     private static double defense;
-    private static double health;
+    @SerializedName("health")private static double startingHealth;
     private static int level;
     private static boolean isInDuel;
+    private static double currentHealth = startingHealth;
 
     public static ArrayList<Item> getCurrentItems() {
         return currentItems;
@@ -36,8 +37,12 @@ public class Player {
         return defense;
     }
 
-    public static double getHealth() {
-        return health;
+    public static double getStartingHealth() {
+        return startingHealth;
+    }
+
+    public static double getCurrentHealth() {
+        return currentHealth;
     }
 
     public static int getLevel() {
@@ -46,5 +51,9 @@ public class Player {
 
     public static boolean isInDuel() {
         return isInDuel;
+    }
+
+    public static void setIsInDuel(boolean isInDuel) {
+        Player.isInDuel = isInDuel;
     }
 }
