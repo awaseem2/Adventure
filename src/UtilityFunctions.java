@@ -106,4 +106,22 @@ public class UtilityFunctions {
             return null;
         }
     }
+
+    /** Helper method for userInput to handle the rest of the command.
+     *
+     * @param inputArray The player's command split by spaces into an Array of String.
+     * @return A String of the player's command after the very first word.
+     */
+    public static String inputAfterAction(String[] inputArray){
+        StringBuilder builder = new StringBuilder();
+
+        for(int i = 1; i < inputArray.length; i++){
+            builder.append(inputArray[i]);
+            if(i != inputArray.length - 1) {
+                builder.append(" ");
+            }
+        }
+
+        return builder.toString();
+    }
 }
