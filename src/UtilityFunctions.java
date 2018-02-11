@@ -24,6 +24,21 @@ public class UtilityFunctions {
         return null;
     }
 
+    /** Takes the String of a room and searches for the Room object it is tied to.
+     *
+     * @param monsterName the String desired to find the Monster of.
+     * @return a Monster object of the desired monster.
+     */
+    public static Monster convertToMonster(String monsterName) {
+        for (Monster monster : Environment.getMap().getMonsters()) {
+            if (monster.getName().equalsIgnoreCase(monsterName)) {
+                return monster;
+            }
+        }
+
+        return null;
+    }
+
     /** Lists the player's inventory separated by commas.
      *
      * @param items the player's inventory.
@@ -43,6 +58,32 @@ public class UtilityFunctions {
         for (int i = 0; i < items.size(); i++) {
             allItems += items.get(i).getName();
             if (i != items.size() - 1) {
+                allItems += ", ";
+            }
+        }
+
+        return allItems;
+    }
+
+    /** Lists the monsters separated by commas.
+     *
+     * @param monsters the monsters in the room.
+     * @return a String of the monsters.
+     */
+    public static String monstersAsString(ArrayList<String> monsters) {
+        String allItems = "";
+
+        if (monsters == null) {
+            return "";
+        }
+
+        if (monsters.isEmpty()) {
+            return "nothing";
+        }
+
+        for (int i = 0; i < monsters.size(); i++) {
+            allItems += monsters.get(i);
+            if (i != monsters.size() - 1) {
                 allItems += ", ";
             }
         }
