@@ -3,6 +3,7 @@ import java.util.Objects;
 public class Item {
     private String name;
     private String use;
+    private double damage;
 
     public String getName() {
         return name;
@@ -12,12 +13,8 @@ public class Item {
         return use;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setUse(String use) {
-        this.use = use;
+    public double getDamage() {
+        return damage;
     }
 
     @Override
