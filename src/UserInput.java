@@ -8,7 +8,7 @@ public class UserInput {
      */
     public static void interpretInput(String[] userInput) {
         String action = userInput[0];
-        String desiredNoun = inputAfterAction(userInput);
+        String desiredNoun = UtilityFunctions.inputAfterAction(userInput);
 
         switch(action.toLowerCase()) {
             case "go":
@@ -41,8 +41,11 @@ public class UserInput {
                 System.out.println("[Level]: " + Player.getLevel());
                 System.out.println("[Attack]:" + Player.getAttack());
                 System.out.println("[Defense]: " + Player.getDefense());
-                System.out.println("[Health]: " + Player.getHealth());
+                System.out.println("[Health]: " + Player.getCurrentHealth());
                 break;
+
+            case "duel":
+                duelCommand(userInput, desiredNoun);
 
             case "exit":
                 System.exit(0);
@@ -62,24 +65,6 @@ public class UserInput {
                 break;
 
         }
-    }
-
-    /** Helper method for userInput to handle the rest of the command.
-     *
-     * @param inputArray The player's command split by spaces into an Array of String.
-     * @return A String of the player's command after the very first word.
-     */
-    private static String inputAfterAction(String[] inputArray){
-        StringBuilder builder = new StringBuilder();
-
-        for(int i = 1; i < inputArray.length; i++){
-            builder.append(inputArray[i]);
-            if(i != inputArray.length - 1) {
-                builder.append(" ");
-            }
-        }
-
-        return builder.toString();
     }
 
     /** Updates the player's current room if the room is a valid option.
@@ -208,6 +193,25 @@ public class UserInput {
 
         if(!found) {
             System.out.println("I can't talk to " + desiredNoun);
+        }
+    }
+
+    /** Handles the duel function in the game.
+     *
+     * @param desiredNoun the person the player inputs to duel.
+     */
+    private static void duelCommand(String[] userInput, String desiredNoun) {
+        boolean found = false;
+        for(String monster : Player.getCurrentRoom().getMonstersInRoom()) {
+            if(desiredNoun.equalsIgnoreCase(monster)) {
+                found = true;
+                Player.setIsInDuel(true);
+                DuelInput.interpretInput(userInput);
+            }
+        }
+
+        if(!found) {
+            System.out.println("I can't duel " + desiredNoun);
         }
     }
 
