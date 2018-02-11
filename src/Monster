@@ -1,8 +1,11 @@
+import com.google.gson.annotations.SerializedName;
+
 public class Monster {
     private String name;
     private double attack;
     private double defense;
-    private double health;
+    @SerializedName("health") private double startingHealth;
+    private double currentHealth = startingHealth;
 
     public String getName() {
         return name;
@@ -16,7 +19,15 @@ public class Monster {
         return defense;
     }
 
-    public double getHealth() {
-        return health;
+    public double getCurrentHealth() {
+        return currentHealth;
+    }
+
+    public void setCurrentHealth(double currentHealth) {
+        this.currentHealth = currentHealth;
+    }
+
+    public double getStartingHealth() {
+        return startingHealth;
     }
 }
