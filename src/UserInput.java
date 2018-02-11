@@ -36,6 +36,14 @@ public class UserInput {
                 talkCommand(desiredNoun);
                 break;
 
+            case "playerinfo":
+                System.out.println("Here are your stats:");
+                System.out.println("[Level]: " + Player.getLevel());
+                System.out.println("[Attack]:" + Player.getAttack());
+                System.out.println("[Defense]: " + Player.getDefense());
+                System.out.println("[Health]: " + Player.getHealth());
+                break;
+
             case "exit":
                 System.exit(0);
                 break;
@@ -80,22 +88,27 @@ public class UserInput {
      * @param desiredNoun the place the player inputs to go to.
      */
     private static void goCommand(String desiredNoun) {
-        boolean found = false;
-        String desiredDirection = desiredNoun;
-        ArrayList<Direction> availableDirections =
-                Player.getCurrentRoom().getDirections();
+        if(!Player.isInDuel()) {
+            boolean found = false;
+            String desiredDirection = desiredNoun;
+            ArrayList<Direction> availableDirections =
+                    Player.getCurrentRoom().getDirections();
 
-        for(Direction currentDirection : availableDirections) {
-            if(currentDirection.getName().equalsIgnoreCase(desiredDirection)) {
-                found = true;
-                Room newRoom = UtilityFunctions.convertToRoom(currentDirection.getRoom());
-                Player.setCurrentRoom(newRoom);
-                break;
+            for (Direction currentDirection : availableDirections) {
+                if (currentDirection.getName().equalsIgnoreCase(desiredDirection)) {
+                    found = true;
+                    Room newRoom = UtilityFunctions.convertToRoom(currentDirection.getRoom());
+                    Player.setCurrentRoom(newRoom);
+                    break;
+                }
             }
-        }
 
-        if(!found){
-            System.out.println("I can’t go " + desiredNoun);
+            if (!found) {
+                System.out.println("I can’t go " + desiredNoun);
+            }
+
+        } else {
+            System.out.println("There are still monsters here, I can’t move.");
         }
 
     }
@@ -106,19 +119,24 @@ public class UserInput {
      * @param desiredNoun the item the player inputs to take.
      */
     private static void takeCommand(String desiredNoun) {
-        boolean found = false;
+        if(!Player.isInDuel()) {
+            boolean found = false;
 
-        for(Item item : Player.getCurrentRoom().getItems()) {
-            if (item.getName().equalsIgnoreCase(desiredNoun)) {
-                Player.getCurrentItems().add(item);
-                Player.getCurrentRoom().getItems().remove(item);
-                found = true;
-                break;
+            for (Item item : Player.getCurrentRoom().getItems()) {
+                if (item.getName().equalsIgnoreCase(desiredNoun)) {
+                    Player.getCurrentItems().add(item);
+                    Player.getCurrentRoom().getItems().remove(item);
+                    found = true;
+                    break;
+                }
             }
-        }
 
-        if(!found) {
-            System.out.println("I can't take " + desiredNoun);
+            if (!found) {
+                System.out.println("I can't take " + desiredNoun);
+            }
+
+        } else {
+            System.out.println("There are still monsters here, I can’t take that.");
         }
 
     }
@@ -129,19 +147,24 @@ public class UserInput {
      * @param desiredNoun the item the player inputs to drop.
      */
     private static void dropCommand(String desiredNoun) {
-        boolean found = false;
+        if(!Player.isInDuel()) {
+            boolean found = false;
 
-        for(Item item: Player.getCurrentItems()) {
-            if (item.getName().equalsIgnoreCase(desiredNoun)) {
-                Player.getCurrentItems().remove(item);
-                Player.getCurrentRoom().getItems().add(item);
-                found = true;
-                break;
+            for (Item item : Player.getCurrentItems()) {
+                if (item.getName().equalsIgnoreCase(desiredNoun)) {
+                    Player.getCurrentItems().remove(item);
+                    Player.getCurrentRoom().getItems().add(item);
+                    found = true;
+                    break;
+                }
             }
-        }
 
-        if(!found) {
-            System.out.println("I can't drop " + desiredNoun);
+            if (!found) {
+                System.out.println("I can't drop " + desiredNoun);
+            }
+
+        } else {
+            System.out.println("There are still monsters here, I can’t drop that.");
         }
 
     }
