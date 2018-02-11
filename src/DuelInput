@@ -1,0 +1,85 @@
+public class DuelInput {
+
+    public static void interpretInput(String[] userInput) {
+        String action = userInput[0];
+        String monster = UtilityFunctions.inputAfterAction(userInput);
+        Monster monsterInBattle = UtilityFunctions.convertToMonster(monster);
+
+        switch (action.toLowerCase()) {
+            case "attack":
+                attackCommand(monsterInBattle);
+                break;
+
+
+            case "disengage":
+                disengageCommand();
+                break;
+
+            case "status":
+                statusCommand(monsterInBattle);
+                break;
+
+            case "list":
+                System.out.println("You are carrying " +
+                        UtilityFunctions.itemsAsString(Player.getCurrentItems()));
+                break;
+
+            case "playerinfo":
+                System.out.println("Here are your stats:");
+                System.out.println("[Level]: " + Player.getLevel());
+                System.out.println("[Attack]:" + Player.getAttack());
+                System.out.println("[Defense]: " + Player.getDefense());
+                System.out.println("[Health]: " + Player.getCurrentHealth());
+                break;
+
+            case "exit":
+                System.exit(0);
+                break;
+
+            case "quit":
+                System.exit(0);
+                break;
+
+        }
+    }
+
+    private static void attackCommand(Monster monsterInBattle) {
+        double damage = Player.getAttack() - monsterInBattle.getDefense();
+        monsterInBattle.setCurrentHealth(monsterInBattle.getCurrentHealth() - damage);
+    }
+
+    private static void disengageCommand() {
+        Player.setIsInDuel(false);
+    }
+
+    /**
+     * Used: https://stackoverflow.com/questions/2051817/return-first-digit-of-an-integer
+     *
+     * @param monsterInBattle
+     */
+    private static void statusCommand(Monster monsterInBattle) {
+        int percentConstant = 100;
+        int percentPlayerHealth = (int) (Player.getCurrentHealth() / Player.getStartingHealth()
+                * percentConstant);
+        int percentMonsterHealth = (int) (monsterInBattle.getCurrentHealth()
+                / monsterInBattle.getStartingHealth() * percentConstant);
+        int playerHealthOutOfTen = '0' -
+                String.valueOf(Math.abs((long)percentPlayerHealth)).charAt(0);
+        int monsterHealthOutOfTen = '0' -
+                String.valueOf(Math.abs((long)percentMonsterHealth)).charAt(0);
+        int playerHealthRounded = percentPlayerHealth - (percentPlayerHealth % 10);
+        int monsterHealthRounded = percentMonsterHealth - (percentMonsterHealth % 10);
+
+        for(int i = 0; i < 10; i++) {
+            if(playerHealthOutOfTen > 0) {
+                System.out.print(223);
+                playerHealthOutOfTen--;
+            } else {
+                System.out.print('_');
+            }
+
+
+        }
+
+    }
+}
