@@ -40,8 +40,10 @@ public class Adventure {
         System.out.println("This room contains " + UtilityFunctions.itemsAsString(
                 Player.getCurrentRoom().getItems()));
         System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
-        System.out.println("From here, you can go: " +
-                Player.getCurrentRoom().getDirections().get(0).getName());
+        if(Player.getCurrentRoom().getMonstersInRoom().isEmpty()) {
+            System.out.println("From here, you can go: " +
+                    Player.getCurrentRoom().getDirections().get(0).getName());
+        }
         String[] input = scanner.nextLine().split(" ");
         UserInput.interpretInput(input);
 
@@ -59,10 +61,14 @@ public class Adventure {
     /** Prints the room the player is in, what it contains, and the available directions.  */
     private static void printDescription() {
         System.out.println(Player.getCurrentRoom().getDescription());
-        System.out.println("This room contains " +
-                UtilityFunctions.itemsAsString(Player.getCurrentRoom().getItems()));
+        System.out.println("This room contains [items]: " +
+                UtilityFunctions.itemsAsString(Player.getCurrentRoom().getItems()) +
+                " and [monsters]: " +
+                UtilityFunctions.monstersAsString(Player.getCurrentRoom().getMonstersInRoom()));
         System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
-        Player.getCurrentRoom().printDirections();
+        if(Player.getCurrentRoom().getMonstersInRoom().isEmpty()) {
+            Player.getCurrentRoom().printDirections();
+        }
     }
 
 }
