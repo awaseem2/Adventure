@@ -24,6 +24,22 @@ public class UtilityFunctions {
         return null;
     }
 
+    /** Takes the String of an item and searches for the Item object it is tied to.
+     *
+     * @param itemName the String desired to find the Room of.
+     * @return a Room object of the desired room.
+     */
+    public static Item convertToItem(String itemName) {
+        for (Room room : Environment.getMap().getRooms()) {
+            for (Item item : room.getItems())
+                if (item.getName().equalsIgnoreCase(itemName)) {
+                    return item;
+                }
+        }
+
+        return null;
+    }
+
     /** Takes the String of a room and searches for the Room object it is tied to.
      *
      * @param monsterName the String desired to find the Monster of.
@@ -32,6 +48,7 @@ public class UtilityFunctions {
     public static Monster convertToMonster(String monsterName) {
         for (Monster monster : Environment.getMap().getMonsters()) {
             if (monster.getName().equalsIgnoreCase(monsterName)) {
+                monster.setCurrentHealth(monster.getStartingHealth());
                 return monster;
             }
         }
