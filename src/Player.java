@@ -3,86 +3,96 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 
 public class Player {
-    private static String name;
-    @SerializedName("items") private static ArrayList<Item> currentItems = new ArrayList<>();
-    private static Room currentRoom;
-    private static double attack;
-    private static double defense;
-    @SerializedName("health")private static double maxHealth;
-    private static int level;
-    private static boolean isInDuel;
-    private static double currentHealth = maxHealth;
-    private static double experience;
+    private String name;
+    @SerializedName("items") private ArrayList<Item> currentItems = new ArrayList<>();
+    private Room currentRoom;
+    private double attack;
+    private double defense;
+    @SerializedName("health")private double maxHealth;
+    private int level;
+    private boolean isInDuel;
+    private double currentHealth = maxHealth;
+    private double experience;
+    private String currentOpponent;
 
-    public static ArrayList<Item> getCurrentItems() {
+    public ArrayList<Item> getCurrentItems() {
         return currentItems;
     }
 
-    public static Room getCurrentRoom() {
+    public Room getCurrentRoom() {
         return currentRoom;
     }
 
-    public static void setCurrentRoom(Room currentRoom) {
-        Player.currentRoom = currentRoom;
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
     }
 
-    public static String getName() {
+    public String getName() {
         return name;
     }
 
-    public static double getAttack() {
+    public double getAttack() {
         return attack;
     }
 
-    public static void setAttack(double attack) {
-        Player.attack = attack;
+    public void setAttack(double attack) {
+        this.attack = attack;
     }
 
-    public static double getDefense() {
+    public double getDefense() {
         return defense;
     }
 
-    public static void setDefense(double defense) {
-        Player.defense = defense;
+    public void setDefense(double defense) {
+        this.defense = defense;
     }
 
-    public static double getMaxHealth() {
+    public double getMaxHealth() {
         return maxHealth;
     }
 
-    public static void setMaxHealth(double maxHealth) {
-        Player.maxHealth = maxHealth;
+    public void setMaxHealth(double maxHealth) {
+        this.maxHealth = maxHealth;
     }
 
-    public static double getCurrentHealth() {
+    public double getCurrentHealth() {
         return currentHealth;
     }
 
-    public static void setCurrentHealth(double currentHealth) {
-        Player.currentHealth = currentHealth;
+    public void setCurrentHealth(double currentHealth) {
+        this.currentHealth = currentHealth;
     }
 
-    public static int getLevel() {
+    public int getLevel() {
         return level;
     }
 
-    public static void setLevel(int level) {
-        Player.level = level;
+    public void setLevel(int level) {
+        this.level = level;
     }
 
-    public static boolean isInDuel() {
+    public boolean isInDuel() {
         return isInDuel;
     }
 
-    public static void setIsInDuel(boolean isInDuel) {
-        Player.isInDuel = isInDuel;
+    public void setIsInDuel(boolean isInDuel) {
+        this.isInDuel = isInDuel;
     }
 
-    public static double getExperience() {
+    public double getExperience() {
         return experience;
     }
 
-    public static void setExperience(double experience) {
-        Player.experience = experience;
+    public void setExperience(double experience) {
+        this.experience = experience;
     }
+
+    public String getCurrentOpponent() {
+        return currentOpponent;
+    }
+
+    public void setCurrentOpponent(String currentOpponent) {
+        this.currentOpponent = currentOpponent;
+    }
+
 }
