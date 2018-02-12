@@ -5,7 +5,7 @@ public class Monster {
     private double attack;
     private double defense;
     @SerializedName("health") private double startingHealth;
-    private double currentHealth = startingHealth;
+    private double currentHealth;
 
     public String getName() {
         return name;
