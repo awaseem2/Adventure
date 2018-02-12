@@ -9,12 +9,14 @@
     "health": 25.0,
     "level": 0
   },
-  "monsters": {
-    "name": "Angrave",
-    "attack": 11.0,
-    "defense": 2.0,
-    "health": 5.0
-  },
+  "monsters": [
+    {
+      "name": "Angrave",
+      "attack": 4.0,
+      "defense": 2.0,
+      "health": 20.0
+    }
+  ],
   "rooms": [
     {
       "name": "MatthewsStreet",
@@ -22,7 +24,8 @@
       "items": [
         {
           "name": "microphone",
-          "use": "[You have been lured into a rap battle with Angrave.] \n Angrave: Hey kid, if you think you get recursion, that's cute.  'Let it go' all the way to subversion. [You instantly lose and walk away with your head down, fighting back tears.]"
+          "use": "[You have been lured into a rap battle with Angrave.] \n Angrave: Hey kid, if you think you get recursion, that's cute.  'Let it go' all the way to subversion. [You instantly lose and walk away with your head down, fighting back tears.]",
+          "damage": 2
         }
       ],
       "directions": [
