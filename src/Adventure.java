@@ -6,7 +6,6 @@ import java.util.Scanner;
 
 public class Adventure {
     private static Scanner scanner = new Scanner(System.in);
-    private static Player player = new Player();
 
     public static void main(String[] args) {
         initializeMap(args[0]);
@@ -26,8 +25,10 @@ public class Adventure {
             System.out.println("Invalid URL.");
         }
 
-        player.setCurrentRoom(UtilityFunctions.convertToRoom(
+        Environment.getMap().getPlayer().setCurrentRoom(UtilityFunctions.convertToRoom(
                 Environment.getMap().getStartingRoom()));
+        Environment.getMap().getPlayer().setCurrentHealth(
+                Environment.getMap().getPlayer().getMaxHealth());
     }
 
     /** Prints the description, items, and directions of the current room.
@@ -35,50 +36,62 @@ public class Adventure {
      */
     private static void beginGame() {
         //Initial console output
-        System.out.println(Player.getCurrentRoom().getDescription());
+        System.out.println(Environment.getMap().getPlayer().getCurrentRoom().getDescription());
         System.out.println("Your journey begins here.");
-        System.out.println("This room contains " + UtilityFunctions.itemsAsString(
-                Player.getCurrentRoom().getItems()));
-        System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
+        System.out.println("This room contains [items]: " + UtilityFunctions.itemsAsString(
+                Environment.getMap().getPlayer().getCurrentRoom().getItems()) + " and [monsters]: "
+                + UtilityFunctions.monstersAsString(
+                        Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom()));
+        System.out.println(
+                Environment.getMap().getPlayer().getCurrentRoom().getNpc().get(0).getName()
+                        + " is in this room.");
 
-        if(Player.getCurrentRoom().getMonstersInRoom().isEmpty()) {
+        if(Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().isEmpty()) {
             System.out.println("From here, you can go: " +
-                    Player.getCurrentRoom().getDirections().get(0).getName());
+                    Environment.getMap().getPlayer().getCurrentRoom()
+                            .getDirections().get(0).getName());
         }
 
-        String[] input = scanner.nextLine().split(" ");
+        String[] input = scanner.nextLine().split(" ", 3);
         handleInput(input);
 
-        while (!Player.getCurrentRoom().equals(
+        while (!Environment.getMap().getPlayer().getCurrentRoom().equals(
                 UtilityFunctions.convertToRoom(Environment.getMap().getEndingRoom()))) {
-            printDescription();
-            input = scanner.nextLine().split(" ");
+            if(!Environment.getMap().getPlayer().isInDuel()) {
+                printDescription();
+            }
+            input = scanner.nextLine().split(" ", 3);
             handleInput(input);
         }
 
-        System.out.println(Player.getCurrentRoom().getDescription());
+        System.out.println(Environment.getMap().getPlayer().getCurrentRoom().getDescription());
         System.out.println("You have reached your final destination.");
     }
 
     /** Prints the room the player is in, what it contains, and the available directions.  */
     private static void printDescription() {
-        System.out.println(Player.getCurrentRoom().getDescription());
+        System.out.println(Environment.getMap().getPlayer().getCurrentRoom().getDescription());
         System.out.println("This room contains [items]: " +
-                UtilityFunctions.itemsAsString(Player.getCurrentRoom().getItems()) +
+                UtilityFunctions.itemsAsString(
+                        Environment.getMap().getPlayer().getCurrentRoom().getItems()) +
                 " and [monsters]: " +
-                UtilityFunctions.monstersAsString(Player.getCurrentRoom().getMonstersInRoom()));
-        System.out.println(Player.getCurrentRoom().getNpc().get(0).getName() + " is in this room.");
-        if(Player.getCurrentRoom().getMonstersInRoom().isEmpty()) {
-            Player.getCurrentRoom().printDirections();
+                UtilityFunctions.monstersAsString(
+                        Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom()));
+        System.out.println(
+                Environment.getMap().getPlayer().getCurrentRoom().getNpc().get(0).getName()
+                        + " is in this room.");
+        if(Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().isEmpty()) {
+            Environment.getMap().getPlayer().getCurrentRoom().printDirections();
         }
     }
 
     private static void handleInput(String[] input) {
-        if(!Player.isInDuel()) {
+        if(!Environment.getMap().getPlayer().isInDuel()) {
             UserInput.interpretInput(input);
         } else {
             DuelInput.interpretInput(input);
         }
     }
+
 
 }
