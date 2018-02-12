@@ -1,6 +1,20 @@
 {
   "startingRoom": "MatthewsStreet",
   "endingRoom": "ACM",
+  "player": {
+    "name": "Alvina",
+    "items": [],
+    "attack": 10.0,
+    "defense": 5.0,
+    "health": 25.0,
+    "level": 0
+  },
+  "monsters": {
+    "name": "Angrave",
+    "attack": 11.0,
+    "defense": 2.0,
+    "health": 5.0
+  },
   "rooms": [
     {
       "name": "MatthewsStreet",
@@ -22,7 +36,8 @@
           "name": "Angrave",
           "message" : "You: hello- \n Angrave: sigh... very well then. But it doesn't seem to me that you've gotten how to college yet."
         }
-      ]
+      ],
+      "monstersInRoom": ["Angrave"]
     },
     {
       "name": "SiebelEntry",
