@@ -206,7 +206,8 @@ public class UserInput {
             if(desiredNoun.equalsIgnoreCase(monster)) {
                 found = true;
                 Player.setIsInDuel(true);
-                DuelInput.interpretInput(userInput);
+                System.out.println("You have just entered a duel with " + desiredNoun);
+                //DuelInput.interpretInput(userInput);
             }
         }
 
