@@ -25,7 +25,8 @@ public class UserInput {
 
             case "list":
                 System.out.println("You are carrying " +
-                        UtilityFunctions.itemsAsString(Player.getCurrentItems()));
+                        UtilityFunctions.itemsAsString(
+                                Environment.getMap().getPlayer().getCurrentItems()));
                 break;
 
             case "use":
@@ -38,14 +39,16 @@ public class UserInput {
 
             case "playerinfo":
                 System.out.println("Here are your stats:");
-                System.out.println("[Level]: " + Player.getLevel());
-                System.out.println("[Attack]:" + Player.getAttack());
-                System.out.println("[Defense]: " + Player.getDefense());
-                System.out.println("[Health]: " + Player.getCurrentHealth());
+                System.out.println("[Level]: " + Environment.getMap().getPlayer().getLevel());
+                System.out.println("[Attack]:" + Environment.getMap().getPlayer().getAttack());
+                System.out.println("[Defense]: " + Environment.getMap().getPlayer().getDefense());
+                System.out.println("[Health]: " +
+                        Environment.getMap().getPlayer().getCurrentHealth());
                 break;
 
             case "duel":
                 duelCommand(userInput, desiredNoun);
+                break;
 
             case "exit":
                 System.exit(0);
@@ -73,17 +76,17 @@ public class UserInput {
      * @param desiredNoun the place the player inputs to go to.
      */
     private static void goCommand(String desiredNoun) {
-        if(!Player.isInDuel()) {
+        if(Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().isEmpty()) {
             boolean found = false;
             String desiredDirection = desiredNoun;
             ArrayList<Direction> availableDirections =
-                    Player.getCurrentRoom().getDirections();
+                    Environment.getMap().getPlayer().getCurrentRoom().getDirections();
 
             for (Direction currentDirection : availableDirections) {
                 if (currentDirection.getName().equalsIgnoreCase(desiredDirection)) {
                     found = true;
                     Room newRoom = UtilityFunctions.convertToRoom(currentDirection.getRoom());
-                    Player.setCurrentRoom(newRoom);
+                    Environment.getMap().getPlayer().setCurrentRoom(newRoom);
                     break;
                 }
             }
@@ -91,7 +94,8 @@ public class UserInput {
             if (!found) {
                 System.out.println("I can’t go " + desiredNoun);
             }
-
+        } else if(Environment.getMap().getPlayer().isInDuel()) {
+            System.out.println("I can't move mid battle.");
         } else {
             System.out.println("There are still monsters here, I can’t move.");
         }
@@ -104,13 +108,13 @@ public class UserInput {
      * @param desiredNoun the item the player inputs to take.
      */
     private static void takeCommand(String desiredNoun) {
-        if(!Player.isInDuel()) {
+        if(!Environment.getMap().getPlayer().isInDuel()) {
             boolean found = false;
 
-            for (Item item : Player.getCurrentRoom().getItems()) {
+            for (Item item : Environment.getMap().getPlayer().getCurrentRoom().getItems()) {
                 if (item.getName().equalsIgnoreCase(desiredNoun)) {
-                    Player.getCurrentItems().add(item);
-                    Player.getCurrentRoom().getItems().remove(item);
+                    Environment.getMap().getPlayer().getCurrentItems().add(item);
+                    Environment.getMap().getPlayer().getCurrentRoom().getItems().remove(item);
                     found = true;
                     break;
                 }
@@ -132,13 +136,13 @@ public class UserInput {
      * @param desiredNoun the item the player inputs to drop.
      */
     private static void dropCommand(String desiredNoun) {
-        if(!Player.isInDuel()) {
+        if(!Environment.getMap().getPlayer().isInDuel()) {
             boolean found = false;
 
-            for (Item item : Player.getCurrentItems()) {
+            for (Item item : Environment.getMap().getPlayer().getCurrentItems()) {
                 if (item.getName().equalsIgnoreCase(desiredNoun)) {
-                    Player.getCurrentItems().remove(item);
-                    Player.getCurrentRoom().getItems().add(item);
+                    Environment.getMap().getPlayer().getCurrentItems().remove(item);
+                    Environment.getMap().getPlayer().getCurrentRoom().getItems().add(item);
                     found = true;
                     break;
                 }
@@ -162,10 +166,10 @@ public class UserInput {
     private static void useCommand(String desiredNoun) {
         boolean found = false;
 
-        for(Item item: Player.getCurrentItems()) {
+        for(Item item: Environment.getMap().getPlayer().getCurrentItems()) {
             if (item.getName().equalsIgnoreCase(desiredNoun)){
                 System.out.println(item.getUse());
-                Player.getCurrentItems().remove(item);
+                Environment.getMap().getPlayer().getCurrentItems().remove(item);
                 found = true;
                 break;
             }
@@ -183,7 +187,7 @@ public class UserInput {
     private static void talkCommand(String desiredNoun) {
         boolean found = false;
 
-        for(Npc npc: Player.getCurrentRoom().getNpc()) {
+        for(Npc npc: Environment.getMap().getPlayer().getCurrentRoom().getNpc()) {
             if (npc.getName().equalsIgnoreCase(desiredNoun)){
                 System.out.println(npc.getMessage());
                 found = true;
@@ -202,11 +206,12 @@ public class UserInput {
      */
     private static void duelCommand(String[] userInput, String desiredNoun) {
         boolean found = false;
-        for(String monster : Player.getCurrentRoom().getMonstersInRoom()) {
+        for(String monster : Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom()) {
             if(desiredNoun.equalsIgnoreCase(monster)) {
                 found = true;
-                Player.setIsInDuel(true);
+                Environment.getMap().getPlayer().setIsInDuel(true);
                 System.out.println("You have just entered a duel with " + desiredNoun);
+                Environment.getMap().getPlayer().setCurrentOpponent(desiredNoun);
                 //DuelInput.interpretInput(userInput);
             }
         }
