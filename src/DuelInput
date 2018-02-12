@@ -2,12 +2,12 @@ public class DuelInput {
 
     public static void interpretInput(String[] userInput) {
         String action = userInput[0];
-        String monster = UtilityFunctions.inputAfterAction(userInput);
-        Monster monsterInBattle = UtilityFunctions.convertToMonster(monster);
+        String monsterString = UtilityFunctions.inputAfterAction(userInput);
+        Monster monsterInBattle = UtilityFunctions.convertToMonster(monsterString);
 
         switch (action.toLowerCase()) {
             case "attack":
-                attackCommand(monsterInBattle);
+                attackCommand(monsterString, monsterInBattle);
                 break;
 
 
@@ -43,9 +43,68 @@ public class DuelInput {
         }
     }
 
-    private static void attackCommand(Monster monsterInBattle) {
-        double damage = Player.getAttack() - monsterInBattle.getDefense();
-        monsterInBattle.setCurrentHealth(monsterInBattle.getCurrentHealth() - damage);
+    private static void attackCommand(String monsterString, Monster monsterInBattle) {
+        double damageToMonster = Player.getAttack() - monsterInBattle.getDefense();
+        monsterInBattle.setCurrentHealth(monsterInBattle.getCurrentHealth() - damageToMonster);
+        System.out.println("You attack the monster by " + damageToMonster);
+        System.out.println("The monster's current health is " + monsterInBattle.getCurrentHealth());
+        handleDuelStatus(monsterString, monsterInBattle);
+
+        if(Player.isInDuel()) {
+            //Monster attacking the player back
+            double damageToPlayer = monsterInBattle.getAttack() - Player.getDefense();
+            Player.setCurrentHealth(Player.getCurrentHealth() - damageToPlayer);
+            System.out.println("The monster damages you by " + damageToPlayer);
+            System.out.println("Your health is " + Player.getCurrentHealth());
+            handleDuelStatus(monsterString, monsterInBattle);
+        }
+    }
+
+    private static void handleDuelStatus(String monsterString, Monster monsterInBattle) {
+        if(monsterInBattle.getCurrentHealth() <= 0) {
+            Player.setIsInDuel(false);
+            Player.getCurrentRoom().getMonstersInRoom().remove(monsterString);
+            System.out.println("You've won the battle!");
+            handleWin(monsterInBattle);
+        } else if(Player.getCurrentHealth() <= 0) {
+            System.out.println(monsterString + " has killed you.");
+            Player.setIsInDuel(false);
+            System.exit(0);
+        }
+    }
+
+    private static void handleWin(Monster monsterInBattle) {
+        double experienceGained = (((monsterInBattle.getAttack() + monsterInBattle.getDefense()) / 2)
+                + monsterInBattle.getStartingHealth())  * 20;
+        Player.setExperience(Player.getExperience() + experienceGained);
+
+        int levelOneExpRequired = 25;
+        int levelTwoExpRequired = 50;
+
+        if(Player.getExperience() >= levelOneExpRequired &&
+                Player.getExperience() < levelTwoExpRequired) {
+            Player.setLevel(1);
+        } else if(Player.getExperience() >= levelTwoExpRequired) {
+            int currentLevel = 1 + currentLevel(levelOneExpRequired, levelTwoExpRequired);
+            if(currentLevel > Player.getLevel()) {
+
+            }
+        }
+    }
+
+    private static int currentLevel(double firstLevel, double secondLevel) {
+        if(secondLevel > Player.getExperience()) {
+            return 0;
+        }
+
+        return 1 + currentLevel(secondLevel, (firstLevel + secondLevel) * 1.1);
+    }
+
+    private static void handleLevelUp() {
+        Player.setAttack(Player.getAttack() * 1.5);
+        Player.setDefense(Player.getDefense() * 1.5);
+        Player.setMaxHealth(Player.getMaxHealth() * 1.3);
+        Player.setCurrentHealth(Player.getMaxHealth());
     }
 
     private static void disengageCommand() {
@@ -59,7 +118,7 @@ public class DuelInput {
      */
     private static void statusCommand(Monster monsterInBattle) {
         int percentConstant = 100;
-        int percentPlayerHealth = (int) (Player.getCurrentHealth() / Player.getStartingHealth()
+        int percentPlayerHealth = (int) (Player.getCurrentHealth() / Player.getMaxHealth()
                 * percentConstant);
         int percentMonsterHealth = (int) (monsterInBattle.getCurrentHealth()
                 / monsterInBattle.getStartingHealth() * percentConstant);
@@ -67,8 +126,6 @@ public class DuelInput {
                 String.valueOf(Math.abs((long)percentPlayerHealth)).charAt(0);
         int monsterHealthOutOfTen = '0' -
                 String.valueOf(Math.abs((long)percentMonsterHealth)).charAt(0);
-        int playerHealthRounded = percentPlayerHealth - (percentPlayerHealth % 10);
-        int monsterHealthRounded = percentMonsterHealth - (percentMonsterHealth % 10);
 
         for(int i = 0; i < 10; i++) {
             if(playerHealthOutOfTen > 0) {
@@ -77,9 +134,15 @@ public class DuelInput {
             } else {
                 System.out.print('_');
             }
-
-
         }
 
+        for(int i = 0; i < 10; i++) {
+            if(monsterHealthOutOfTen > 0) {
+                System.out.print(223);
+                monsterHealthOutOfTen--;
+            } else {
+                System.out.print('_');
+            }
+        }
     }
 }
