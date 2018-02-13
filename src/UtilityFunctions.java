@@ -37,19 +37,9 @@ public class UtilityFunctions {
                 }
         }
 
-        return null;
-    }
-
-    /** Takes the String of a room and searches for the Room object it is tied to.
-     *
-     * @param monsterName the String desired to find the Monster of.
-     * @return a Monster object of the desired monster.
-     */
-    public static Monster convertToMonster(String monsterName) {
-        for (Monster monster : Environment.getMap().getMonsters()) {
-            if (monster.getName().equalsIgnoreCase(monsterName)) {
-                monster.setCurrentHealth(monster.getStartingHealth());
-                return monster;
+        for (Item item : Environment.getMap().getPlayer().getCurrentItems()) {
+            if (item.getName().equalsIgnoreCase(itemName)) {
+                return item;
             }
         }
 
