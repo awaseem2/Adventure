@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Map {
     private String startingRoom;
@@ -6,6 +7,7 @@ public class Map {
     private ArrayList<Room> rooms;
     private Player player;
     private ArrayList<Monster> monsters;
+    private HashMap<String, Monster> monsterMap = new HashMap<>();
 
     public String getStartingRoom() {
         return startingRoom;
@@ -25,5 +27,16 @@ public class Map {
 
     public ArrayList<Monster> getMonsters() {
         return monsters;
+    }
+
+    public HashMap<String, Monster> getMonsterMap() {
+        return monsterMap;
+    }
+
+    public void initializeMonsterMap() {
+        for (Monster monster : monsters) {
+            monster.setCurrentHealth(monster.getStartingHealth());
+            monsterMap.put(monster.getName().toLowerCase(), monster);
+        }
     }
 }
