@@ -6,6 +6,7 @@ public class Monster {
     private double defense;
     @SerializedName("health") private double startingHealth;
     private double currentHealth;
+    private String enterDuelMessage;
 
     public String getName() {
         return name;
@@ -41,5 +42,13 @@ public class Monster {
 
     public double getStartingHealth() {
         return startingHealth;
+    }
+
+    public String getEnterDuelMessage() {
+        return enterDuelMessage;
+    }
+
+    public void setEnterDuelMessage(String enterDuelMessage) {
+        this.enterDuelMessage = enterDuelMessage;
     }
 }
