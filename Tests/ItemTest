@@ -1,0 +1,24 @@
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class ItemTest {
+
+    @Before
+    public void setUp() throws Exception {
+        DataLoader.initializeMapFromUrl("https://api.myjson.com/bins/ifvd9");
+    }
+
+    @Test
+    public void getName() {
+        assertEquals("microphone",
+                Environment.getMap().getRooms().get(0).getItems().get(0).getName());
+    }
+
+    @Test
+    public void getDamage() {
+        assertEquals(2,
+                Environment.getMap().getRooms().get(0).getItems().get(0).getDamage(), .01);
+    }
+}
