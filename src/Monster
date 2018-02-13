@@ -11,12 +11,24 @@ public class Monster {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public double getAttack() {
         return attack;
     }
 
+    public void setAttack(double attack) {
+        this.attack = attack;
+    }
+
     public double getDefense() {
         return defense;
+    }
+
+    public void setDefense(double defense) {
+        this.defense = defense;
     }
 
     public double getCurrentHealth() {
