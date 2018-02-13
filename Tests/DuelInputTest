@@ -1,0 +1,132 @@
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.*;
+
+public class DuelInputTest {
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+
+    @Before
+    public void setUp() throws Exception {
+        DataLoader.initializeMapFromUrl("https://api.myjson.com/bins/ifvd9");
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
+    }
+
+    @Test
+    public void validAttackCommand() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        Environment.getMap().getPlayer().setCurrentOpponent("Angrave");
+        Environment.getMap().getPlayer().setIsInDuel(true);
+        Environment.getMap().getPlayer().setCurrentHealth(25);
+        testMonster.setCurrentHealth(20);
+
+        String[] exampleInput = "attack".split(" ");
+        DuelInput.interpretInput(exampleInput);
+
+        assertEquals("You attack the monster by 8.0\r\n" +
+                "The monster's current health is 12.0\r\n" +
+                "The monster damages you by -1.0\r\n" +
+                "Your health is 25.0\r\n", outContent.toString());
+    }
+
+    @Test
+    public void validAttackWithCommand() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        Environment.getMap().getPlayer().setCurrentOpponent("Angrave");
+        Environment.getMap().getPlayer().setIsInDuel(true);
+        Environment.getMap().getPlayer().setCurrentHealth(25);
+        testMonster.setCurrentHealth(20);
+        Environment.getMap().getPlayer().getCurrentItems().add(
+                UtilityFunctions.convertToItem("microphone"));
+
+        String[] exampleInput = "attack with microphone".split(" ");
+        DuelInput.interpretInput(exampleInput);
+
+        assertEquals("You attack the monster by 10.0 using microphone\r\n" +
+                        "The monster's current health is 10.0\r\n" +
+                        "The monster damages you by -1.0\r\n" +
+                        "Your health is 25.0\r\n", outContent.toString());
+    }
+
+    @Test
+    public void attackWithUnavailableItemCommand() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        Environment.getMap().getPlayer().setCurrentOpponent("Angrave");
+        Environment.getMap().getPlayer().setIsInDuel(true);
+        Environment.getMap().getPlayer().setCurrentHealth(25);
+        testMonster.setCurrentHealth(20);
+        Environment.getMap().getPlayer().getCurrentItems().add(
+                UtilityFunctions.convertToItem("microphone"));
+
+        String[] exampleInput = "attack with resume".split(" ");
+        DuelInput.interpretInput(exampleInput);
+
+        assertEquals("I can't use items not in my inventory.\r\n", outContent.toString());
+    }
+
+    @Test
+    public void invalidAttackWithCommand() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        Environment.getMap().getPlayer().setCurrentOpponent("Angrave");
+        Environment.getMap().getPlayer().setIsInDuel(true);
+        Environment.getMap().getPlayer().setCurrentHealth(25);
+        testMonster.setCurrentHealth(20);
+        Environment.getMap().getPlayer().getCurrentItems().add(
+                UtilityFunctions.convertToItem("microphone"));
+
+        String[] exampleInput = "attack with oh no".split(" ", 3);
+        DuelInput.interpretInput(exampleInput);
+
+        assertEquals("I cannot use oh no\r\n", outContent.toString());
+    }
+
+    @Test
+    public void disengageTest() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        Environment.getMap().getPlayer().setCurrentOpponent("Angrave");
+        Environment.getMap().getPlayer().setIsInDuel(true);
+
+        String[] exampleInput = "disengage".split(" ", 3);
+        DuelInput.interpretInput(exampleInput);
+
+        assertFalse(Environment.getMap().getPlayer().isInDuel());
+    }
+
+    @Test
+    public void invalidDuelInput() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        Environment.getMap().getPlayer().setCurrentOpponent("Angrave");
+        Environment.getMap().getPlayer().setIsInDuel(true);
+
+        String[] exampleInput = "please have i suffered enough yet".split(" ", 3);
+        DuelInput.interpretInput(exampleInput);
+
+        assertEquals("I can't do that, I am in a duel right now.\r\n",
+                outContent.toString());
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(System.out);
+        System.setErr(System.err);
+    }
+}
