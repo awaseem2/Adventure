@@ -47,7 +47,7 @@ public class UserInput {
                 break;
 
             case "duel":
-                duelCommand(userInput, desiredNoun);
+                duelCommand(desiredNoun);
                 break;
 
             case "exit":
@@ -94,8 +94,6 @@ public class UserInput {
             if (!found) {
                 System.out.println("I can’t go " + desiredNoun);
             }
-        } else if(Environment.getMap().getPlayer().isInDuel()) {
-            System.out.println("I can't move mid battle.");
         } else {
             System.out.println("There are still monsters here, I can’t move.");
         }
@@ -108,7 +106,7 @@ public class UserInput {
      * @param desiredNoun the item the player inputs to take.
      */
     private static void takeCommand(String desiredNoun) {
-        if(!Environment.getMap().getPlayer().isInDuel()) {
+        if(Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().isEmpty()) {
             boolean found = false;
 
             for (Item item : Environment.getMap().getPlayer().getCurrentRoom().getItems()) {
@@ -136,24 +134,19 @@ public class UserInput {
      * @param desiredNoun the item the player inputs to drop.
      */
     private static void dropCommand(String desiredNoun) {
-        if(!Environment.getMap().getPlayer().isInDuel()) {
-            boolean found = false;
+        boolean found = false;
 
-            for (Item item : Environment.getMap().getPlayer().getCurrentItems()) {
-                if (item.getName().equalsIgnoreCase(desiredNoun)) {
-                    Environment.getMap().getPlayer().getCurrentItems().remove(item);
-                    Environment.getMap().getPlayer().getCurrentRoom().getItems().add(item);
-                    found = true;
-                    break;
-                }
+        for (Item item : Environment.getMap().getPlayer().getCurrentItems()) {
+            if (item.getName().equalsIgnoreCase(desiredNoun)) {
+                Environment.getMap().getPlayer().getCurrentItems().remove(item);
+                Environment.getMap().getPlayer().getCurrentRoom().getItems().add(item);
+                found = true;
+                break;
             }
+        }
 
-            if (!found) {
-                System.out.println("I can't drop " + desiredNoun);
-            }
-
-        } else {
-            System.out.println("There are still monsters here, I can’t drop that.");
+        if (!found) {
+            System.out.println("I can't drop " + desiredNoun);
         }
 
     }
@@ -204,7 +197,7 @@ public class UserInput {
      *
      * @param desiredNoun the person the player inputs to duel.
      */
-    private static void duelCommand(String[] userInput, String desiredNoun) {
+    private static void duelCommand(String desiredNoun) {
         boolean found = false;
         for(String monster : Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom()) {
             if(desiredNoun.equalsIgnoreCase(monster)) {
@@ -212,7 +205,6 @@ public class UserInput {
                 Environment.getMap().getPlayer().setIsInDuel(true);
                 System.out.println("You have just entered a duel with " + desiredNoun);
                 Environment.getMap().getPlayer().setCurrentOpponent(desiredNoun);
-                //DuelInput.interpretInput(userInput);
             }
         }
 
