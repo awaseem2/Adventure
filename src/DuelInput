@@ -2,20 +2,31 @@ public class DuelInput {
 
     public static void interpretInput(String[] input) {
         String action = input[0];
-        String monsterString = Environment.getMap().getPlayer().getCurrentOpponent();
-        Monster monsterInBattle = UtilityFunctions.convertToMonster(monsterString);
+        String monsterName = Environment.getMap().getPlayer().getCurrentOpponent().toLowerCase();
+        Monster monsterInBattle = Environment.getMap().getMonsterMap().get(monsterName);
 
-        if(input[0].equalsIgnoreCase("attack") &&
-                input[0].equalsIgnoreCase("with")) {
-            if(UtilityFunctions.convertToItem(input[3]) != null) {
-                Item item = UtilityFunctions.convertToItem(input[3]);
-                attackWithCommand(monsterString, monsterInBattle, item);
+        if (input.length > 2) {
+            if (input[0].equalsIgnoreCase("attack") &&
+                    input[1].equalsIgnoreCase("with")) {
+
+                Item item = UtilityFunctions.convertToItem(input[2]);
+
+                if (item != null) {
+                    if (Environment.getMap().getPlayer().getCurrentItems().contains(item)) {
+                        attackWithCommand(monsterName, monsterInBattle, item);
+                    } else {
+                        System.out.println("I can't use items not in my inventory.");
+                    }
+                } else {
+                    System.out.println("I cannot use " + input[2]);
+                }
+                return;
             }
         }
 
         switch (action.toLowerCase()) {
             case "attack":
-                attackCommand(monsterString, monsterInBattle);
+                attackCommand(monsterName, monsterInBattle);
                 break;
 
 
@@ -51,7 +62,7 @@ public class DuelInput {
                 break;
 
             default:
-                System.out.println("I can't do that, there are monsters in this room.");
+                System.out.println("I can't do that, I am in a duel right now.");
                 break;
 
         }
@@ -60,20 +71,39 @@ public class DuelInput {
     private static void attackCommand(String monsterString, Monster monsterInBattle) {
         double damageToMonster = Environment.getMap().getPlayer().getAttack()
                 - monsterInBattle.getDefense();
-        monsterInBattle.setCurrentHealth(monsterInBattle.getCurrentHealth() - damageToMonster);
+        double newMonsterHealth = monsterInBattle.getCurrentHealth() - damageToMonster;
+
+        // If the damage accidentally increases the monster's health
+        if (newMonsterHealth <= monsterInBattle.getStartingHealth()) {
+            monsterInBattle.setCurrentHealth(newMonsterHealth);
+        } else {
+            monsterInBattle.setCurrentHealth(monsterInBattle.getStartingHealth());
+        }
+
         System.out.println("You attack the monster by " + damageToMonster);
         System.out.println("The monster's current health is " + monsterInBattle.getCurrentHealth());
         handleDuelStatus(monsterString, monsterInBattle);
 
         if(Environment.getMap().getPlayer().isInDuel()) {
-            //Monster attacking the player back
+
+            // Monster attacking the player back
             double damageToPlayer = monsterInBattle.getAttack()
                     - Environment.getMap().getPlayer().getDefense();
-            Environment.getMap().getPlayer().setCurrentHealth(
-                    Environment.getMap().getPlayer().getCurrentHealth() - damageToPlayer);
+            double newPlayerHealth = Environment.getMap().getPlayer().getCurrentHealth()
+                    - damageToPlayer;
+
+            // If the damage accidentally increases the player's health
+            if (newPlayerHealth <= Environment.getMap().getPlayer().getMaxHealth()) {
+                Environment.getMap().getPlayer().setCurrentHealth(newPlayerHealth);
+            } else {
+                Environment.getMap().getPlayer().setCurrentHealth(
+                        Environment.getMap().getPlayer().getMaxHealth());
+            }
+
             System.out.println("The monster damages you by " + damageToPlayer);
             System.out.println("Your health is "
                     + Environment.getMap().getPlayer().getCurrentHealth());
+
             handleDuelStatus(monsterString, monsterInBattle);
         }
     }
@@ -81,20 +111,41 @@ public class DuelInput {
     private static void attackWithCommand(String monsterString, Monster monsterInBattle, Item item) {
         double damageToMonster = Environment.getMap().getPlayer().getAttack() +
                 item.getDamage() - monsterInBattle.getDefense();
-        monsterInBattle.setCurrentHealth(monsterInBattle.getCurrentHealth() - damageToMonster);
-        System.out.println("You attack the monster by " + damageToMonster);
+        double newMonsterHealth = monsterInBattle.getCurrentHealth() - damageToMonster;
+
+        //If the damage accidentally increases the monster's health
+        if (newMonsterHealth <= monsterInBattle.getStartingHealth()) {
+            monsterInBattle.setCurrentHealth(newMonsterHealth);
+        } else {
+            monsterInBattle.setCurrentHealth(monsterInBattle.getStartingHealth());
+        }
+
+        System.out.println("You attack the monster by " + damageToMonster
+                + " using " + item.getName());
         System.out.println("The monster's current health is " + monsterInBattle.getCurrentHealth());
+        Environment.getMap().getPlayer().getCurrentItems().remove(item);
+
         handleDuelStatus(monsterString, monsterInBattle);
 
         if(Environment.getMap().getPlayer().isInDuel()) {
             //Monster attacking the player back
             double damageToPlayer = monsterInBattle.getAttack()
                     - Environment.getMap().getPlayer().getDefense();
-            Environment.getMap().getPlayer().setCurrentHealth(
-                    Environment.getMap().getPlayer().getCurrentHealth() - damageToPlayer);
+            double newPlayerHealth = Environment.getMap().getPlayer().getCurrentHealth()
+                    - damageToPlayer;
+
+            //If the damage accidentally increases the player's health
+            if (newPlayerHealth <= Environment.getMap().getPlayer().getMaxHealth()) {
+                Environment.getMap().getPlayer().setCurrentHealth(newPlayerHealth);
+            } else {
+                Environment.getMap().getPlayer().setCurrentHealth(
+                        Environment.getMap().getPlayer().getMaxHealth());
+            }
+
             System.out.println("The monster damages you by " + damageToPlayer);
             System.out.println("Your health is "
                     + Environment.getMap().getPlayer().getCurrentHealth());
+
             handleDuelStatus(monsterString, monsterInBattle);
         }
     }
@@ -127,8 +178,6 @@ public class DuelInput {
             Environment.getMap().getPlayer().setLevel(1);
         } else if(Environment.getMap().getPlayer().getExperience() >= levelTwoExpRequired) {
             int currentLevel = 1 + currentLevel(levelOneExpRequired, levelTwoExpRequired);
-            System.out.println("current level: " + currentLevel);
-            System.out.println("experience: " + Environment.getMap().getPlayer().getExperience());
             if(currentLevel > Environment.getMap().getPlayer().getLevel()) {
                 Environment.getMap().getPlayer().setLevel(currentLevel);
                 handleLevelUp();
@@ -148,10 +197,14 @@ public class DuelInput {
         System.out.println("You are now at level " + Environment.getMap().getPlayer().getLevel());
         Environment.getMap().getPlayer().setAttack(
                 Environment.getMap().getPlayer().getAttack() * 1.5);
+        System.out.println("Your attack is now " + Environment.getMap().getPlayer().getAttack());
         Environment.getMap().getPlayer().setDefense(
                 Environment.getMap().getPlayer().getDefense() * 1.5);
+        System.out.println("Your defense is now " + Environment.getMap().getPlayer().getDefense());
         Environment.getMap().getPlayer().setMaxHealth(
                 Environment.getMap().getPlayer().getMaxHealth() * 1.3);
+        System.out.println("Your max health is now "
+                + Environment.getMap().getPlayer().getMaxHealth());
         Environment.getMap().getPlayer().setCurrentHealth(
                 Environment.getMap().getPlayer().getMaxHealth());
     }
@@ -172,8 +225,8 @@ public class DuelInput {
         int percentMonsterHealth = (int) (monsterInBattle.getCurrentHealth()
                 / monsterInBattle.getStartingHealth() * percentConstant);
 
-        int playerHealthOutOfTen = ((percentPlayerHealth + 5) / 10) * 10;
-        int monsterHealthOutOfTen = ((percentMonsterHealth + 5) / 10) * 10;
+        int playerHealthOutOfTen = (percentPlayerHealth + 5) / 10;
+        int monsterHealthOutOfTen = (percentMonsterHealth + 5) / 10;
 
         System.out.print("Player health: ");
         for(int i = 0; i < 10; i++) {
@@ -187,6 +240,7 @@ public class DuelInput {
 
         System.out.println();
         System.out.print("Monster health: ");
+
         for(int i = 0; i < 10; i++) {
             if(monsterHealthOutOfTen > 0) {
                 System.out.print("#");
@@ -195,5 +249,7 @@ public class DuelInput {
                 System.out.print('_');
             }
         }
+
+        System.out.println();
     }
 }
