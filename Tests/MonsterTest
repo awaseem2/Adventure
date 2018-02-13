@@ -1,0 +1,38 @@
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class MonsterTest {
+
+    @Before
+    public void setUp() throws Exception {
+        DataLoader.initializeMapFromUrl("https://api.myjson.com/bins/ifvd9");
+    }
+
+    @Test
+    public void getName() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        assertEquals("Angrave", testMonster.getName());
+    }
+
+    @Test
+    public void getAttack() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        testMonster.setAttack(4.0);
+        assertEquals(4.0, testMonster.getAttack(), .01);
+    }
+
+    @Test
+    public void getDefense() {
+        Monster testMonster = new Monster();
+        testMonster.setName("Angrave");
+        Environment.getMap().getMonsterMap().put("Angrave", testMonster);
+        testMonster.setDefense(2.0);
+        assertEquals(2.0, testMonster.getDefense(), .01);
+    }
+}
