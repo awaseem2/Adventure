@@ -2,6 +2,7 @@ import com.google.gson.Gson;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
 import com.mashape.unirest.request.HttpRequest;
+
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
@@ -21,6 +22,6 @@ public class DataLoader {
         String jsonFromUrl = request.asJson().getBody().toString();
         Gson gson = new Gson();
         Environment.setMap(gson.fromJson(jsonFromUrl, Map.class));
+        Environment.getMap().initializeMonsterMap();
     }
-
 }
