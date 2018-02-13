@@ -1,11 +1,8 @@
-import com.google.gson.Gson;
-
 import java.io.IOException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class UtilityFunctions {
 
@@ -15,7 +12,7 @@ public class UtilityFunctions {
      * @return a Room object of the desired room.
      */
     public static Room convertToRoom(String roomName) {
-        for (Room room : Environment.getMap().getRooms()) {
+        for (Room room : Map.getLayout().getRooms()) {
             if (room.getName().equalsIgnoreCase(roomName)) {
                 return room;
             }
@@ -30,14 +27,14 @@ public class UtilityFunctions {
      * @return a Room object of the desired room.
      */
     public static Item convertToItem(String itemName) {
-        for (Room room : Environment.getMap().getRooms()) {
+        for (Room room : Map.getLayout().getRooms()) {
             for (Item item : room.getItems())
                 if (item.getName().equalsIgnoreCase(itemName)) {
                     return item;
                 }
         }
 
-        for (Item item : Environment.getMap().getPlayer().getCurrentItems()) {
+        for (Item item : Map.getLayout().getPlayer().getCurrentItems()) {
             if (item.getName().equalsIgnoreCase(itemName)) {
                 return item;
             }
