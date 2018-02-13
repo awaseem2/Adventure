@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class Map {
+public class Layout {
     private String startingRoom;
     private String endingRoom;
     private ArrayList<Room> rooms;
@@ -33,6 +33,7 @@ public class Map {
         return monsterMap;
     }
 
+    /** Creates hashmap of Monster objects and their names. */
     public void initializeMonsterMap() {
         for (Monster monster : monsters) {
             monster.setCurrentHealth(monster.getStartingHealth());
