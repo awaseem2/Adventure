@@ -1,0 +1,202 @@
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+
+import static org.junit.Assert.*;
+
+public class UserInputTest {
+
+    private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+    private final ByteArrayOutputStream errContent = new ByteArrayOutputStream();
+
+    @Before
+    public void setUp() throws Exception {
+        DataLoader.initializeMapFromUrl("https://api.myjson.com/bins/ifvd9");
+        System.setOut(new PrintStream(outContent));
+        System.setErr(new PrintStream(errContent));
+    }
+
+    @Test
+    public void validGoCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().clear();
+        String[] exampleInput = "go west".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("SiebelEntry",
+                Environment.getMap().getPlayer().getCurrentRoom().getName());
+    }
+
+    @Test
+    public void invalidGoCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().clear();
+        String[] exampleInput = "go east".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I can’t go east\r\n", outContent.toString());
+    }
+
+    @Test
+    public void monstersPresentGoCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        String[] exampleInput = "go west".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("There are still monsters here, I can’t move.\r\n",
+                outContent.toString());
+    }
+
+    @Test
+    public void validTakeCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().clear();
+        String[] exampleInput = "take microphone".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertTrue(Environment.getMap().getPlayer().getCurrentItems()
+                .contains(UtilityFunctions.convertToItem("microphone")));
+    }
+
+    @Test
+    public void invalidTakeCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        Environment.getMap().getPlayer().getCurrentRoom().getMonstersInRoom().clear();
+        String[] exampleInput = "take resume".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I can't take resume\r\n", outContent.toString());
+    }
+
+    @Test
+    public void monstersPresentTakeCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        String[] exampleInput = "take microphone".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("There are still monsters here, I can’t take that.\r\n",
+                outContent.toString());
+    }
+
+    @Test
+    public void validDropCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        Environment.getMap().getPlayer().getCurrentItems()
+                .add(UtilityFunctions.convertToItem("microphone"));
+        String[] exampleInput = "drop microphone".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertFalse(Environment.getMap().getPlayer().getCurrentItems()
+                .contains(UtilityFunctions.convertToItem("microphone")));
+    }
+
+    @Test
+    public void invalidDropCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        Environment.getMap().getPlayer().getCurrentItems()
+                .add(UtilityFunctions.convertToItem("microphone"));
+        String[] exampleInput = "drop resume".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I can't drop resume\r\n", outContent.toString());
+    }
+
+    @Test
+    public void validUseCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        Environment.getMap().getPlayer().getCurrentItems()
+                .add(UtilityFunctions.convertToItem("microphone"));
+        String[] exampleInput = "use microphone".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("[You have been lured into a rap battle with Angrave.] \n" +
+                        " Angrave: Hey kid, if you think you get recursion, that's cute.  " +
+                        "'Let it go' all the way to subversion. [You instantly lose and walk " +
+                        "away with your head down, fighting back tears.]\r\n",
+                outContent.toString());
+    }
+
+    @Test
+    public void invalidUseCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        String[] exampleInput = "use resume".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I can't use resume\r\n", outContent.toString());
+    }
+
+
+    @Test
+    public void validTalkCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        String[] exampleInput = "talk angrave".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("You: hello- \n" +
+                " Angrave: sigh... very well then. But it doesn't seem to me that you've gotten " +
+                        "how to college yet.\r\n", outContent.toString());
+    }
+
+    @Test
+    public void invalidTalkCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        String[] exampleInput = "talk xyz".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I can't talk to xyz\r\n", outContent.toString());
+    }
+
+    @Test
+    public void validDuelCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        String[] exampleInput = "duel angrave".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("You have just entered a duel with angrave\r\n",
+                outContent.toString());
+        assertTrue(Environment.getMap().getPlayer().isInDuel());
+    }
+
+    @Test
+    public void invalidDuelCommand() {
+        Environment.getMap().getPlayer().setCurrentRoom(Environment.getMap().getRooms().get(0));
+        String[] exampleInput = "duel xyz".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I can't duel xyz\r\n", outContent.toString());
+        assertFalse(Environment.getMap().getPlayer().isInDuel());
+    }
+
+    @Test
+    public void validListCommand() {
+        Environment.getMap().getPlayer().getCurrentItems().add(
+                UtilityFunctions.convertToItem("microphone"));
+        Environment.getMap().getPlayer().getCurrentItems().add(
+                UtilityFunctions.convertToItem("resume"));
+        String[] exampleInput = "list".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("You are carrying microphone, resume\r\n", outContent.toString());
+    }
+
+    @Test
+    public void validPlayerinfoCommand() {
+        Environment.getMap().getPlayer().setLevel(4);
+        Environment.getMap().getPlayer().setCurrentHealth(25.0);
+        String[] exampleInput = "playerinfo".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("Here are your stats:\r\n" +
+                "[Level]: 4\r\n" +
+                "[Attack]:10.0\r\n" +
+                "[Defense]: 5.0\r\n" +
+                "[Health]: 25.0\r\n", outContent.toString());
+    }
+
+    @Test
+    public void invalidUserInputOneWord() {
+        String[] exampleInput = "ahhhh".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I don't understand 'ahhhh'\r\n", outContent.toString());
+    }
+
+    @Test
+    public void invalidUserInputMultipleWord() {
+        String[] exampleInput = "ah ah ah".split(" ");
+        UserInput.interpretInput(exampleInput);
+        assertEquals("I don't understand 'ah ah ah'\r\n", outContent.toString());
+    }
+
+    @After
+    public void restoreStreams() {
+        System.setOut(System.out);
+        System.setErr(System.err);
+    }
+}
