@@ -89,10 +89,10 @@ public class Adventure {
 
     /** Decides to use User Input vs Duel Input depending on whether the player is in a duel */
     private static void handleInput(String[] input) {
-        if(!Map.getLayout().getPlayer().isInDuel()) {
-            UserInput.interpretInput(input);
-        } else {
+        if(Map.getLayout().getPlayer().isInDuel()) {
             DuelInput.interpretInput(input);
+        } else {
+            UserInput.interpretInput(input);
         }
     }
 
