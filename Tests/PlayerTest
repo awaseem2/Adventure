@@ -1,0 +1,42 @@
+import org.junit.Before;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
+
+public class PlayerTest {
+
+    @Before
+    public void setUp() throws Exception {
+        DataLoader.initializeMapFromUrl("https://api.myjson.com/bins/ifvd9");
+    }
+
+    @Test
+    public void getName() {
+        assertEquals("Alvina", Map.getLayout().getPlayer().getName());
+    }
+
+    @Test
+    public void getAttack() {
+        assertEquals(10.0, Map.getLayout().getPlayer().getAttack(), .01);
+    }
+
+    @Test
+    public void getDefense() {
+        assertEquals(5.0, Map.getLayout().getPlayer().getDefense(), .01);
+    }
+
+    @Test
+    public void getMaxHealth() {
+        assertEquals(25.0, Map.getLayout().getPlayer().getMaxHealth(), .01);
+    }
+
+    @Test
+    public void getLevel() {
+        assertEquals(0, Map.getLayout().getPlayer().getLevel());
+    }
+
+    @Test
+    public void isInDuel() {
+        assertFalse(Map.getLayout().getPlayer().isInDuel());
+    }
+}
