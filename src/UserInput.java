@@ -198,11 +198,13 @@ public class UserInput {
                 found = true;
                 Map.getLayout().getPlayer().setIsInDuel(true);
 
-                System.out.println("You have just entered a duel with " + desiredMonster);
-                Monster monsterInBattle = Map.getLayout().getMonsterMap().get(desiredMonster);
+                Monster monsterInBattle = Map.getLayout().getMonsterMap()
+                        .get(desiredMonster.toLowerCase());
+                System.out.println("You have just entered a duel with "
+                        + monsterInBattle.getName());
                 System.out.println(monsterInBattle.getEnterDuelMessage());
 
-                Map.getLayout().getPlayer().setCurrentOpponent(desiredMonster);
+                Map.getLayout().getPlayer().setCurrentOpponent(monsterInBattle.getName());
             }
         }
 
