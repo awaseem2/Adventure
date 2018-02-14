@@ -112,15 +112,20 @@ public class DuelInput {
     private static void playerAttackMonster(Monster monsterInBattle, double damageToMonster) {
         double newMonsterHealth = monsterInBattle.getCurrentHealth() - damageToMonster;
 
-        // If the damage accidentally increases the monster's health
-        if (newMonsterHealth <= monsterInBattle.getStartingHealth()) {
-            monsterInBattle.setCurrentHealth(newMonsterHealth);
-        } else {
+        if (newMonsterHealth > monsterInBattle.getStartingHealth()) {
             monsterInBattle.setCurrentHealth(monsterInBattle.getStartingHealth());
+        } else if(newMonsterHealth < 0) {
+            monsterInBattle.setCurrentHealth(0);
+        } else {
+            monsterInBattle.setCurrentHealth(newMonsterHealth);
         }
 
-        System.out.println("You attack " + monsterInBattle.getName() + " by " + damageToMonster);
-        System.out.println(monsterInBattle.getName() + "'s current health is " + monsterInBattle.getCurrentHealth());
+        double damageRounded = Math.floor(damageToMonster * 100) / 100;
+        double healthRounded = Math.floor(monsterInBattle.getCurrentHealth() * 100) / 100;
+
+        System.out.println("You deal " + damageRounded
+                + " damage to "+ monsterInBattle.getName());
+        System.out.println(monsterInBattle.getName() + "'s current health is " + healthRounded);
 
         handleDuelStatus(monsterInBattle);
     }
@@ -133,17 +138,22 @@ public class DuelInput {
     private static void monsterAttackPlayer(Monster monsterInBattle, double damageToPlayer) {
         double newPlayerHealth = Map.getLayout().getPlayer().getCurrentHealth() - damageToPlayer;
 
-        // If the damage accidentally increases the player's health
-        if (newPlayerHealth <= Map.getLayout().getPlayer().getMaxHealth()) {
-            Map.getLayout().getPlayer().setCurrentHealth(newPlayerHealth);
-        } else {
+        if (newPlayerHealth > Map.getLayout().getPlayer().getMaxHealth()) {
             Map.getLayout().getPlayer().setCurrentHealth(
                     Map.getLayout().getPlayer().getMaxHealth());
+        } else if(newPlayerHealth < 0) {
+            Map.getLayout().getPlayer().setCurrentHealth(0);
+        } else {
+            Map.getLayout().getPlayer().setCurrentHealth(newPlayerHealth);
         }
 
-        System.out.println(monsterInBattle.getName() + " damages you by " + damageToPlayer);
-        System.out.println("Your health is "
-                + Map.getLayout().getPlayer().getCurrentHealth());
+        double damageRounded = Math.floor(damageToPlayer * 100) / 100;
+        double healthRounded =
+                Math.floor(Map.getLayout().getPlayer().getCurrentHealth() * 100) / 100;
+
+        System.out.println(monsterInBattle.getName() + " deals "
+                + damageRounded + " damage to you.");
+        System.out.println("Your health is " + healthRounded);
 
         handleDuelStatus(monsterInBattle);
     }
@@ -207,19 +217,24 @@ public class DuelInput {
 
     /** Updates player's level, defense, attack, and max health. */
     private static void handleLevelUp() {
+        final double ATTACK_MULTIPLIER = 1.5;
+        final double DEFENSE_MULTIPLIER = 1.5;
+        final double HEALTH_MULTIPLIER = 1.3;
+
         System.out.println("You are now at level " + Map.getLayout().getPlayer().getLevel());
         Map.getLayout().getPlayer().setAttack(
-                Map.getLayout().getPlayer().getAttack() * 1.5);
+                Map.getLayout().getPlayer().getAttack() * ATTACK_MULTIPLIER);
         System.out.println("Your attack is now " + Map.getLayout().getPlayer().getAttack());
         Map.getLayout().getPlayer().setDefense(
-                Map.getLayout().getPlayer().getDefense() * 1.5);
+                Map.getLayout().getPlayer().getDefense() * DEFENSE_MULTIPLIER);
         System.out.println("Your defense is now " + Map.getLayout().getPlayer().getDefense());
         Map.getLayout().getPlayer().setMaxHealth(
-                Map.getLayout().getPlayer().getMaxHealth() * 1.3);
+                Map.getLayout().getPlayer().getMaxHealth() * HEALTH_MULTIPLIER);
         System.out.println("Your max health is now "
                 + Map.getLayout().getPlayer().getMaxHealth());
         Map.getLayout().getPlayer().setCurrentHealth(
                 Map.getLayout().getPlayer().getMaxHealth());
+        Map.getLayout().getPlayer().setExperience(0);
     }
 
     /** Player leaves the duel if they say disengage. */
